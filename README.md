@@ -55,8 +55,10 @@ context. Factories may return `sending Calendar<Date>` for transfer; ordinary co
 and local calls do not force a transfer. Captured context must retain stable semantics.
 No shared static non-sendable calendar singleton is required.
 
-`DateTime<Date>` composes any date representation with Time.Hour, Minute, Second,
-Millisecond, Microsecond and Nanosecond. Its Sendable, Equatable and Hashable conformances
+`DateTime<Date>` composes any date representation with bounded clock components
+`Time.Day.Hour`, `Time.Hour.Minute`, `Time.Minute.Second`,
+`Time.Second.Millisecond`, `Time.Millisecond.Microsecond`, and
+`Time.Microsecond.Nanosecond`. Its Sendable, Equatable and Hashable conformances
 are conditional on Date. It makes no assumptions about the date's fields. This composition
 is why Calendar depends on Time; the calendar correspondence itself uses no Time API.
 

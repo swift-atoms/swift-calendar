@@ -148,7 +148,7 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
     @Test func dateTimeComposesTheDateRepresentationWithTemporalAtoms() throws {
         let date = WeekDate(week: 42, weekday: 3)
         let value = DateTime(
-            date: date, hour: try Time.Hour(12),
+            date: date, hour: try Time.Day.Hour(12),
             millisecond: try .init(123), microsecond: try .init(456), nanosecond: try .init(789)
         )
         #expect(value.date == date)
