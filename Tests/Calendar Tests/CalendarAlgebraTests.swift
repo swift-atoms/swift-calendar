@@ -1,6 +1,11 @@
 import Testing
 import Calendar
 import Time
+import Difference
+import Cardinal
+import Magnitude
+import Polarity
+import Tagged
 
 private struct WeekDate: Equatable {
     let week: Int64
@@ -44,8 +49,9 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
         #expect(end == WeekDate(week: 1, weekday: 1))
         #expect(try calendar.adding(days: 0, to: start) == start)
         #expect(try calendar.adding(days: 5, to: calendar.adding(days: 3, to: start)) == end)
-        #expect(try calendar.distance(from: start, to: end) == 8)
-        #expect(try calendar.distance(from: end, to: start) == -8)
+        #expect(try calendar.distance(from: start, to: end).underlying == 8)
+        #expect(try calendar.distance(from: end, to: start).underlying == -8)
+        #expect(try calendar.adding(days: calendar.distance(from: start, to: end), to: start) == end)
         #expect(try calendar.adding(days: -8, to: end) == start)
     }
 
@@ -106,9 +112,6 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
         #expect(throws: Calendar<DayNumber>.Error.arithmetic(.overflow)) {
             try identity.adding(days: 1, to: DayNumber(rawValue: .max))
         }
-        #expect(throws: Calendar<DayNumber>.Error.arithmetic(.overflow)) {
-            try identity.distance(from: DayNumber(rawValue: .min), to: DayNumber(rawValue: .max))
-        }
     }
 
     @Test func errorDomainsDoNotDependOnDateRepresentation() {
@@ -122,8 +125,23 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
     @Test func checkedCoordinateArithmetic() {
         #expect(throws: DayNumber.Error.overflow) { try DayNumber(rawValue: .max).adding(1) }
         #expect(throws: DayNumber.Error.overflow) { try DayNumber(rawValue: .min).adding(-1) }
-        #expect(throws: DayNumber.Error.overflow) {
-            try DayNumber(rawValue: .min).distance(to: DayNumber(rawValue: .max))
+        let distance = DayNumber(rawValue: .min).distance(to: DayNumber(rawValue: .max))
+        #expect(distance.underlying.magnitude.value.rawValue == UInt.max)
+        #expect(distance.underlying.polarity == .positive)
+    }
+
+    @Test func `full coordinate range has a representable displacement`() throws {
+        let calendar = Calendar<DayNumber>(dayNumber: { $0 }, date: { $0 })
+        let start = DayNumber(rawValue: .min)
+        let end = DayNumber(rawValue: .max)
+        let forward = try calendar.distance(from: start, to: end)
+        let backward = try calendar.distance(from: end, to: start)
+        #expect(forward.underlying.magnitude.value.rawValue == UInt.max)
+        #expect(backward.underlying == -forward.underlying)
+        #expect(try calendar.adding(days: forward, to: start) == end)
+        #expect(try calendar.adding(days: backward, to: end) == start)
+        #expect(throws: Calendar<DayNumber>.Error.arithmetic(.overflow)) {
+            try calendar.adding(days: forward, to: end)
         }
     }
 

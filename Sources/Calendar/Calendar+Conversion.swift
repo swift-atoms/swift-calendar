@@ -1,17 +1,18 @@
+internal import Either
+internal import Optic
+
 extension Calendar {
     public func convert<OtherDate>(
         _ date: Date, to calendar: Calendar<OtherDate>
     ) throws(Calendar<Date>.Error) -> OtherDate {
-        let day: DayNumber
-        do throws(Calendar<Date>.Encode.Error) {
-            day = try dayNumber(of: date)
+        let conversion = correspondence.appending(calendar.correspondence.reversed)
+        do throws(Either<Calendar<Date>.Encode.Error, Calendar<OtherDate>.Decode.Error>) {
+            return try conversion.forward(date)
         } catch {
-            throw .encode(error)
-        }
-        do throws(Calendar<OtherDate>.Decode.Error) {
-            return try calendar.date(on: day)
-        } catch {
-            throw .decode(error)
+            switch error {
+            case .left(let error): throw .encode(error)
+            case .right(let error): throw .decode(error)
+            }
         }
     }
 }

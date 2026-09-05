@@ -1,5 +1,12 @@
+internal import Difference
+
 extension Calendar {
     public func adding(days: Int64, to date: Date) throws(Calendar<Date>.Error) -> Date {
+        try adding(days: DayNumber.Offset(Int(days)), to: date)
+    }
+
+    /// Translates by a typed displacement, including distances wider than Int64.
+    public func adding(days: DayNumber.Offset, to date: Date) throws(Calendar<Date>.Error) -> Date {
         let day: DayNumber
         do throws(Calendar<Date>.Encode.Error) {
             day = try dayNumber(of: date)
@@ -8,7 +15,7 @@ extension Calendar {
         }
         let result: DayNumber
         do throws(DayNumber.Error) {
-            result = try day.adding(days)
+            result = try day.advanced(by: days)
         } catch {
             throw .arithmetic(error)
         }
@@ -19,7 +26,7 @@ extension Calendar {
         }
     }
 
-    public func distance(from start: Date, to end: Date) throws(Calendar<Date>.Error) -> Int64 {
+    public func distance(from start: Date, to end: Date) throws(Calendar<Date>.Error) -> DayNumber.Offset {
         let first: DayNumber
         let last: DayNumber
         do throws(Calendar<Date>.Encode.Error) {
@@ -28,10 +35,6 @@ extension Calendar {
         } catch {
             throw .encode(error)
         }
-        do throws(DayNumber.Error) {
-            return try first.distance(to: last)
-        } catch {
-            throw .arithmetic(error)
-        }
+        return first.distance(to: last)
     }
 }

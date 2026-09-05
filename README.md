@@ -11,7 +11,10 @@ let identity = Calendar<DayNumber>(dayNumber: { $0 }, date: { $0 })
 let tomorrow = try identity.adding(days: 1, to: DayNumber(rawValue: 1))
 ```
 
-`Calendar<Date>` stores two ordinary conversion closures. Date-to-coordinate encoding
+`Calendar<Date>` stores an `Optic.Isomorphism.Partial` whose two directions are ordinary
+conversion closures. The immutable `Calendar<Date>.Encode` and `.Decode` values are
+independently callable; use `Calendar(encode:decode:)` to assemble them, or the closure
+initializer above. Date-to-coordinate encoding
 throws `Calendar<Date>.Encode.Error.unsupported`; coordinate-to-date decoding throws
 `Calendar<Date>.Decode.Error.unsupported(DayNumber)`. Encoding errors do not retain the
 date, so arbitrary date representations remain unconstrained by Sendable.
@@ -28,8 +31,18 @@ dayNumber(date(n)) = n
 ```
 
 `adding(days:to:)`, `distance(from:to:)` and `convert(_:to:)` are derived solely by
-composing these functions with checked day-coordinate arithmetic. A represented date's
+composing these functions with checked day-coordinate arithmetic. Calendar conversion
+uses shared partial-isomorphism composition; directional failures retain their origin
+before being mapped to the calendar's error cases. The public `correspondence` can also
+be reversed or composed directly, preserving the inverse laws over the common supported
+domain. An unrestricted `Optic.Adapter` makes no such law claim. A represented date's
 semantic equality need not be provided as a Swift Equatable conformance.
+
+`DayNumber.Offset` is a tagged `Difference`. Distance spans the entire signed coordinate
+range, including the displacement from `Int64.min` to `Int64.max`. Advancement accepts
+that typed displacement and reports overflow only when the resulting coordinate lies
+outside the representable range. The Int64 `adding(days:to:)` overload remains a convenient
+way to express smaller displacements.
 
 `DayNumber` uses an Int64 Rata Die coordinate: day 1 denotes proleptic Gregorian
 0001-01-01, and day 0 its predecessor. This origin is a shared convention, not a code
