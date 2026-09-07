@@ -10,3 +10,5 @@ extension __CalendarDecodeError: Swift.Equatable {}
 extension Calendar.Decode {
     public typealias Error = __CalendarDecodeError
 }
+
+extension Calendar.Decode.Error: Swift.Error {}

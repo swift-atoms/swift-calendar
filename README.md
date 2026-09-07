@@ -66,3 +66,5 @@ The old Rules and System types are removed. Gregorian now owns its Year, Month, 
 Week and validated Date structure. Tests cover a week/weekday representation without
 months, partial domains, arithmetic laws, and region-based transfer with non-sendable dates
 and captured calendar context.
+
+Error and equality conformances live beside the error representations. The composed error keeps its encode/decode/arithmetic cause without introducing a dependency on the represented Date. Moving those conformances into their declaration files preserves checked error sendability and the existing typed-throwing API.
