@@ -5,8 +5,7 @@ public enum __CalendarDecodeError {
     case unsupported(DayNumber)
 }
 
-extension __CalendarDecodeError: Swift.Error {}
-extension __CalendarDecodeError: Equatable {}
+extension __CalendarDecodeError: Swift.Equatable {}
 
 extension Calendar.Decode {
     public typealias Error = __CalendarDecodeError

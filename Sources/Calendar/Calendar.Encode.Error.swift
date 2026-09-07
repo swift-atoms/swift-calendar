@@ -5,8 +5,7 @@ public enum __CalendarEncodeError {
     case unsupported
 }
 
-extension __CalendarEncodeError: Swift.Error {}
-extension __CalendarEncodeError: Equatable {}
+extension __CalendarEncodeError: Swift.Equatable {}
 
 extension Calendar.Encode {
     public typealias Error = __CalendarEncodeError

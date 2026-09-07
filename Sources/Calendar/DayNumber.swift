@@ -44,7 +44,6 @@ extension DayNumber {
     }
 }
 
-extension DayNumber: RawRepresentable {}
-extension DayNumber: Sendable {}
-extension DayNumber: Hashable {}
-extension DayNumber: Comparable {}
+extension DayNumber: Swift.Sendable {}
+
+extension DayNumber: Swift.Hashable {}

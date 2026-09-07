@@ -7,8 +7,8 @@ let package = Package(
     platforms: [.macOS(.v27), .iOS(.v27), .tvOS(.v27), .watchOS(.v27), .visionOS(.v27)],
     products: [
         .library(name: "Calendar", targets: ["Calendar"]),
-        .library(name: "Calendar Standard Library Integration", targets: ["Calendar Standard Library Integration"]),
-        .library(name: "Calendar Foundation Library Integration", targets: ["Calendar Foundation Library Integration"]),
+
+        .library(name: "Calendar Foundation Integration", targets: ["Calendar Foundation Integration"]),
         .library(name: "Calendar Test Support", targets: ["Calendar Test Support"]),
     ],
     dependencies: [
@@ -35,20 +35,13 @@ let package = Package(
             ],
             path: "Sources/Calendar"
         ),
+        
         .target(
-            name: "Calendar Standard Library Integration",
+            name: "Calendar Foundation Integration",
             dependencies: [
                 .target(name: "Calendar"),
             ],
-            path: "Sources/Calendar Standard Library Integration"
-        ),
-        .target(
-            name: "Calendar Foundation Library Integration",
-            dependencies: [
-                .target(name: "Calendar"),
-                .target(name: "Calendar Standard Library Integration"),
-            ],
-            path: "Sources/Calendar Foundation Library Integration"
+            path: "Sources/Calendar Foundation Integration"
         ),
         .target(
             name: "Calendar Test Support",
@@ -71,8 +64,7 @@ let package = Package(
                 .product(name: "Optic", package: "swift-optic"),
                 .product(name: "Either", package: "swift-either"),
                 .target(name: "Calendar Test Support"),
-                .target(name: "Calendar Standard Library Integration"),
-                .target(name: "Calendar Foundation Library Integration"),
+                .target(name: "Calendar Foundation Integration"),
             ],
             path: "Tests/Calendar Tests"
         ),

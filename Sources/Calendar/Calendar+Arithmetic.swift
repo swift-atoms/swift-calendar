@@ -1,6 +1,7 @@
 internal import Difference
 
 extension Calendar {
+    @_disfavoredOverload
     public func adding(days: Int64, to date: Date) throws(Calendar<Date>.Error) -> Date {
         try adding(days: DayNumber.Offset(Int(days)), to: date)
     }

@@ -5,5 +5,4 @@ extension DayNumber {
     }
 }
 
-extension DayNumber.Error: Swift.Error {}
-extension DayNumber.Error: Equatable {}
+extension DayNumber.Error: Swift.Equatable {}

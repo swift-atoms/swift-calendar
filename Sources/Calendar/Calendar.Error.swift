@@ -7,8 +7,7 @@ public enum __CalendarError {
     case arithmetic(DayNumber.Error)
 }
 
-extension __CalendarError: Swift.Error {}
-extension __CalendarError: Equatable {}
+extension __CalendarError: Swift.Equatable {}
 
 extension Calendar {
     public typealias Error = __CalendarError
