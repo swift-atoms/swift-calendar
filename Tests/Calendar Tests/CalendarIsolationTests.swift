@@ -47,8 +47,8 @@ private func makeDateTime() -> sending DateTime<LocalDate> { DateTime(date: Loca
 private func requireSendable<T: Sendable>(_ value: T) {}
 private struct EqualityOnly: Equatable { let value: Int }
 
-@Suite struct CalendarIsolationTests {
-    @Test func localConstructionDoesNotTransferAliases() throws {
+@Suite struct `Calendars preserve isolation and ownership` {
+    @Test func `local construction does not transfer aliases`() throws {
         let date = LocalDate(1)
         let calendar = makeCalendar()
         let value = DateTime(date: date)
@@ -57,17 +57,17 @@ private struct EqualityOnly: Equatable { let value: Int }
         #expect(try calendar.date(on: DayNumber(rawValue: 11)).value == date.value)
     }
 
-    @Test func equalityDoesNotRequireHashability() {
+    @Test func `equality does not require hashability`() {
         #expect(DateTime(date: EqualityOnly(value: 1)) == DateTime(date: EqualityOnly(value: 1)))
     }
 
-    @Test func conditionalHashabilityAndSendabilityRemainAvailable() {
+    @Test func `conditional hashability and sendability remain available`() {
         let value = DateTime(date: DayNumber(rawValue: 42))
         requireSendable(value)
         #expect(Set([value, value]).count == 1)
     }
 
-    @Test func ordinaryClosuresCanRetainLocallyAliasedState() throws {
+    @Test func `ordinary closures can retain locally aliased state`() throws {
         let context = LocalContext()
         let calendar = Calendar<LocalDate>(
             dayNumber: { date throws(Calendar<LocalDate>.Encode.Error) in
@@ -89,14 +89,14 @@ private struct EqualityOnly: Equatable { let value: Int }
         #expect(try calendar.dayNumber(of: LocalDate(1)).rawValue == 11)
     }
 
-    @Test func capturedCalendarStateCanBeTransferredAsOneRegion() async throws {
+    @Test func `captured calendar state can be transferred as one region`() async throws {
         let receiver = CalendarReceiver()
         let calendar = makeCalendar()
         await receiver.store(calendar)
         #expect(try await receiver.dayNumber() == 12)
     }
 
-    @Test func nonSendableDateTimeCanBeTransferredAsOneRegion() async {
+    @Test func `non sendable date time can be transferred as one region`() async {
         let receiver = DateTimeReceiver()
         let value = makeDateTime()
         await receiver.store(value)

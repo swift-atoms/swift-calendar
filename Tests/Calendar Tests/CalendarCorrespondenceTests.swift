@@ -3,7 +3,7 @@ import Optic
 import Testing
 
 @Suite
-private struct `Calendar Correspondence Tests` {
+private struct `Calendar directions compose through fixed coordinates` {
     @Test
     func `first class directions retain their leaf failure domains`() throws {
         let encode = Calendar<String>.Encode { value throws(Calendar<String>.Encode.Error) in

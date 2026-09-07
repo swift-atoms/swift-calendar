@@ -1,6 +1,5 @@
 public import Time
 
-/// A calendar date composed with the existing temporal component types.
 public struct DateTime<Date> {
     public let date: Date
     public let hour: Time.Day.Hour

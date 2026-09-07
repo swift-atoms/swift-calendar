@@ -6,7 +6,6 @@ extension Calendar {
         try adding(days: DayNumber.Offset(Int(days)), to: date)
     }
 
-    /// Translates by a typed displacement, including distances wider than Int64.
     public func adding(days: DayNumber.Offset, to date: Date) throws(Calendar<Date>.Error) -> Date {
         let day: DayNumber
         do throws(Calendar<Date>.Encode.Error) {

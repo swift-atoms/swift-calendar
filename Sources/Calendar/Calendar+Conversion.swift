@@ -11,7 +11,7 @@ extension Calendar {
         } catch {
             switch error {
             case .left(let error): throw .encode(error)
-            case .right(let error): throw .decode(error)
+            case .right(.unsupported(let day)): throw .decode(.unsupported(day))
             }
         }
     }

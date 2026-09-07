@@ -2,8 +2,6 @@ public import Affine
 internal import Difference
 public import Tagged
 
-/// A Rata Die calendar coordinate: day 1 is proleptic Gregorian 0001-01-01.
-/// This coordinate is independent of a physical instant or a time-zone boundary.
 public struct DayNumber {
     private let position: Affine.Position<DayNumber>
 
@@ -26,7 +24,6 @@ extension DayNumber {
         try advanced(by: Offset(Difference(Int(days))))
     }
 
-    /// Every pair of Int64 day coordinates has a representable signed difference.
     public func distance(to other: Self) -> Offset {
         position.distance(to: other.position)
     }

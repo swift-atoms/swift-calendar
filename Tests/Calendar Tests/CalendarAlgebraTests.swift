@@ -12,7 +12,6 @@ private struct WeekDate: Equatable {
     let weekday: Int
 }
 
-/// A date representation with weeks and weekdays, and no year or month.
 private func weekCalendar() -> sending Calendar<WeekDate> {
     Calendar(
         dayNumber: { date throws(Calendar<WeekDate>.Encode.Error) in
@@ -21,7 +20,7 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
             guard let rawValue = Int64(exactly: value) else { throw .unsupported }
             return DayNumber(rawValue: rawValue)
         },
-        date: { day in
+        date: { day throws(Calendar<WeekDate>.Decode.Error) in
             let quotient = day.rawValue / 7
             let remainder = day.rawValue % 7
             return WeekDate(
@@ -32,9 +31,9 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
     )
 }
 
-@Suite struct CalendarAlgebraTests {
+@Suite struct `Calendars preserve their coordinate algebra` {
     @Test(arguments: [Int64.min, -8, -7, -1, 0, 1, 6, 7, 8, Int64.max])
-    func inverseLawsForADateWithoutMonths(rawValue: Int64) throws {
+    func `inverse laws for adate without months`(rawValue: Int64) throws {
         let calendar = weekCalendar()
         let day = DayNumber(rawValue: rawValue)
         let date = try calendar.date(on: day)
@@ -42,7 +41,7 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
         #expect(try calendar.date(on: calendar.dayNumber(of: date)) == date)
     }
 
-    @Test func advancementAndDistanceAreDerivedFromCoordinates() throws {
+    @Test func `advancement and distance are derived from coordinates`() throws {
         let calendar = weekCalendar()
         let start = WeekDate(week: -1, weekday: 7)
         let end = try calendar.adding(days: 8, to: start)
@@ -55,7 +54,7 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
         #expect(try calendar.adding(days: -8, to: end) == start)
     }
 
-    @Test func conversionBetweenRepresentations() throws {
+    @Test func `conversion between representations`() throws {
         let source = weekCalendar()
         let target = Calendar<DayNumber>(dayNumber: { $0 }, date: { $0 })
         let date = WeekDate(week: 42, weekday: 3)
@@ -64,7 +63,7 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
         #expect(try target.convert(converted, to: source) == date)
     }
 
-    @Test func partialDomainsReportTypedErrors() {
+    @Test func `partial domains report typed errors`() {
         let calendar = Calendar<String>(
             dayNumber: { value throws(Calendar<String>.Encode.Error) in
                 guard value == "origin" else { throw .unsupported }
@@ -81,7 +80,7 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
         }
     }
 
-    @Test func composedOperationsPreserveLeafErrors() {
+    @Test func `composed operations preserve leaf errors`() {
         let origin = Calendar<String>(
             dayNumber: { value throws(Calendar<String>.Encode.Error) in
                 guard value == "origin" else { throw .unsupported }
@@ -114,15 +113,19 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
         }
     }
 
-    @Test func errorDomainsDoNotDependOnDateRepresentation() {
-        let encode: Calendar<String>.Encode.Error = Calendar<Int>.Encode.Error.unsupported
-        let decode: Calendar<String>.Decode.Error = Calendar<Int>.Decode.Error.unsupported(.init(rawValue: 1))
-        let composed: Calendar<String>.Error = Calendar<Int>.Error.decode(decode)
+    @Test func `nested errors preserve their cases and checked conformances`() {
+        func requireError<Value: Swift.Error & Equatable & Sendable>(_ value: Value) {}
+        let encode = Calendar<String>.Encode.Error.unsupported
+        let decode = Calendar<String>.Decode.Error.unsupported(.init(rawValue: 1))
+        let composed = Calendar<String>.Error.decode(decode)
+        requireError(encode)
+        requireError(decode)
+        requireError(composed)
         #expect(encode == .unsupported)
         #expect(composed == .decode(.unsupported(.init(rawValue: 1))))
     }
 
-    @Test func checkedCoordinateArithmetic() {
+    @Test func `checked coordinate arithmetic`() {
         #expect(throws: DayNumber.Error.overflow) { try DayNumber(rawValue: .max).adding(1) }
         #expect(throws: DayNumber.Error.overflow) { try DayNumber(rawValue: .min).adding(-1) }
         let distance = DayNumber(rawValue: .min).distance(to: DayNumber(rawValue: .max))
@@ -145,7 +148,7 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
         }
     }
 
-    @Test func dateTimeComposesTheDateRepresentationWithTemporalAtoms() throws {
+    @Test func `date time composes the date representation with temporal atoms`() throws {
         let date = WeekDate(week: 42, weekday: 3)
         let value = DateTime(
             date: date, hour: try Time.Day.Hour(12),
