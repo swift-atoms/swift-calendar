@@ -33,7 +33,7 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
 
 @Suite struct `Calendars preserve their coordinate algebra` {
     @Test(arguments: [Int64.min, -8, -7, -1, 0, 1, 6, 7, 8, Int64.max])
-    func `inverse laws for adate without months`(rawValue: Int64) throws {
+    func `Week dates and day numbers round trip across their coordinate domain`(rawValue: Int64) throws {
         let calendar = weekCalendar()
         let day = DayNumber(rawValue: rawValue)
         let date = try calendar.date(on: day)
@@ -54,7 +54,7 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
         #expect(try calendar.adding(days: -8, to: end) == start)
     }
 
-    @Test func `conversion between representations`() throws {
+    @Test func `Calendar conversion preserves the day coordinate across date representations`() throws {
         let source = weekCalendar()
         let target = Calendar<DayNumber>(dayNumber: { $0 }, date: { $0 })
         let date = WeekDate(week: 42, weekday: 3)
@@ -125,7 +125,7 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
         #expect(composed == .decode(.unsupported(.init(rawValue: 1))))
     }
 
-    @Test func `checked coordinate arithmetic`() {
+    @Test func `Day coordinate addition rejects overflow while full range distance remains representable`() {
         #expect(throws: DayNumber.Error.overflow) { try DayNumber(rawValue: .max).adding(1) }
         #expect(throws: DayNumber.Error.overflow) { try DayNumber(rawValue: .min).adding(-1) }
         let distance = DayNumber(rawValue: .min).distance(to: DayNumber(rawValue: .max))
