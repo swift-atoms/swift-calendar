@@ -12,11 +12,11 @@ let package = Package(
         .library(name: "Calendar Test Support", targets: ["Calendar Test Support"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/swift-atoms/swift-coordinate.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-polarity.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-magnitude.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-cardinal.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-time.git", branch: "main"),
-        .package(url: "https://github.com/swift-atoms/swift-affine.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-difference.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-tagged.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-optic.git", branch: "main"),
@@ -26,8 +26,11 @@ let package = Package(
         .target(
             name: "Calendar",
             dependencies: [
+                .product(name: "Coordinate", package: "swift-coordinate"),
+                .product(name: "Cardinal", package: "swift-cardinal"),
+                .product(name: "Magnitude", package: "swift-magnitude"),
+                .product(name: "Polarity", package: "swift-polarity"),
                 .product(name: "Time", package: "swift-time"),
-                .product(name: "Affine", package: "swift-affine"),
                 .product(name: "Difference", package: "swift-difference"),
                 .product(name: "Tagged", package: "swift-tagged"),
                 .product(name: "Optic", package: "swift-optic"),
@@ -58,7 +61,6 @@ let package = Package(
                 .product(name: "Cardinal", package: "swift-cardinal"),
                 .target(name: "Calendar"),
                 .product(name: "Time", package: "swift-time"),
-                .product(name: "Affine", package: "swift-affine"),
                 .product(name: "Difference", package: "swift-difference"),
                 .product(name: "Tagged", package: "swift-tagged"),
                 .product(name: "Optic", package: "swift-optic"),
