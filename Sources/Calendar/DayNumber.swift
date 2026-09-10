@@ -5,7 +5,6 @@ internal import Cardinal
 internal import Magnitude
 internal import Polarity
 
-/// A fixed-day point. Coordinate storage and the affine relationship are separate.
 public struct DayNumber {
     private let position: Coordinate<1, Int64>
 
