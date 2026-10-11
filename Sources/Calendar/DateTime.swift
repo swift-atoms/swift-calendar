@@ -28,11 +28,11 @@ public struct DateTime<Date> {
     }
 }
 
-extension DateTime: Swift.Sendable where Date: Swift.Sendable {}
+extension DateTime: Swift::Sendable where Date: Swift::Sendable {}
 
-extension DateTime: Swift.Equatable where Date: Swift.Equatable {}
+extension DateTime: Swift::Equatable where Date: Swift::Equatable {}
 
-extension DateTime: Swift.Hashable where Date: Swift.Hashable {}
+extension DateTime: Swift::Hashable where Date: Swift::Hashable {}
 
 extension DateTime {
     public var totalNanoseconds: Int {

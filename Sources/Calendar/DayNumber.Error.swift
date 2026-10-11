@@ -4,6 +4,6 @@ extension DayNumber {
     }
 }
 
-extension DayNumber.Error: Swift.Equatable {}
+extension DayNumber.Error: Swift::Equatable {}
 
-extension DayNumber.Error: Swift.Error {}
+extension DayNumber.Error: Swift::Error {}

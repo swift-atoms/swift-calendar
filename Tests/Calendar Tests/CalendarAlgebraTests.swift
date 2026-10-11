@@ -114,7 +114,7 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
     }
 
     @Test func `nested errors preserve their cases and checked conformances`() {
-        func requireError<Value: Swift.Error & Equatable & Sendable>(_ value: Value) {}
+        func requireError<Value: Swift::Error & Equatable & Sendable>(_ value: Value) {}
         let encode = Calendar<String>.Encode.Error.unsupported
         let decode = Calendar<String>.Decode.Error.unsupported(.init(rawValue: 1))
         let composed = Calendar<String>.Error.decode(decode)

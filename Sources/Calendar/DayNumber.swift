@@ -46,5 +46,5 @@ extension DayNumber {
     public static func - (lhs: Self, rhs: Self) -> Offset { rhs.distance(to: lhs) }
 }
 
-extension DayNumber: Swift.Sendable {}
-extension DayNumber: Swift.Hashable {}
+extension DayNumber: Swift::Sendable {}
+extension DayNumber: Swift::Hashable {}

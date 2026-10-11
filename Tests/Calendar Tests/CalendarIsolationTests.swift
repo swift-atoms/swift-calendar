@@ -33,12 +33,18 @@ private func makeCalendar() -> sending Calendar<LocalDate> {
 
 private actor CalendarReceiver {
     private var calendar: Calendar<LocalDate>?
+}
+
+extension CalendarReceiver {
     func store(_ calendar: sending Calendar<LocalDate>) { self.calendar = calendar }
     func dayNumber() throws -> Int64? { try calendar?.dayNumber(of: LocalDate(2)).rawValue }
 }
 
 private actor DateTimeReceiver {
     private var dateTime: DateTime<LocalDate>?
+}
+
+extension DateTimeReceiver {
     func store(_ dateTime: sending DateTime<LocalDate>) { self.dateTime = dateTime }
     func value() -> Int64? { dateTime?.date.value }
 }

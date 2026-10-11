@@ -1,1 +1,1 @@
-extension DayNumber: Swift.Comparable {}
+extension DayNumber: Swift::Comparable {}

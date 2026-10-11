@@ -1,1 +1,1 @@
-extension DayNumber: Swift.RawRepresentable {}
+extension DayNumber: Swift::RawRepresentable {}
