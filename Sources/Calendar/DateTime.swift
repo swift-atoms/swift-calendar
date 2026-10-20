@@ -36,6 +36,10 @@ extension DateTime: Swift::Hashable where Date: Swift::Hashable {}
 
 extension DateTime {
     public var totalNanoseconds: Int {
-        Time.totalNanoseconds(millisecond: millisecond, microsecond: microsecond, nanosecond: nanosecond)
+        Time.totalNanoseconds(
+            millisecond: millisecond,
+            microsecond: microsecond,
+            nanosecond: nanosecond
+        )
     }
 }

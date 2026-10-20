@@ -1,8 +1,8 @@
-import Testing
 import Calendar
-import Time
 import Difference
 import Tagged
+import Testing
+import Time
 
 private final class LocalDate {
     let value: Int64
@@ -23,7 +23,12 @@ private func makeCalendar() -> sending Calendar<LocalDate> {
         },
         date: { day throws(Calendar<LocalDate>.Decode.Error) in
             do throws(Difference.Error) {
-                return LocalDate(Int64(try DayNumber(rawValue: context.origin).distance(to: day).underlying.intValue()))
+                return LocalDate(
+                    Int64(
+                        try DayNumber(rawValue: context.origin).distance(to: day).underlying
+                            .intValue()
+                    )
+                )
             } catch {
                 throw .unsupported(day)
             }
@@ -85,7 +90,12 @@ private struct EqualityOnly: Equatable { let value: Int }
             },
             date: { day throws(Calendar<LocalDate>.Decode.Error) in
                 do throws(Difference.Error) {
-                    return LocalDate(Int64(try DayNumber(rawValue: context.origin).distance(to: day).underlying.intValue()))
+                    return LocalDate(
+                        Int64(
+                            try DayNumber(rawValue: context.origin).distance(to: day).underlying
+                                .intValue()
+                        )
+                    )
                 } catch {
                     throw .unsupported(day)
                 }

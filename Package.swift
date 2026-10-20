@@ -8,7 +8,10 @@ let package = Package(
     products: [
         .library(name: "Calendar", targets: ["Calendar"]),
 
-        .library(name: "Calendar Foundation Integration", targets: ["Calendar Foundation Integration"]),
+        .library(
+            name: "Calendar Foundation Integration",
+            targets: ["Calendar Foundation Integration"]
+        ),
         .library(name: "Calendar Test Support", targets: ["Calendar Test Support"]),
     ],
     dependencies: [
@@ -38,18 +41,18 @@ let package = Package(
             ],
             path: "Sources/Calendar"
         ),
-        
+
         .target(
             name: "Calendar Foundation Integration",
             dependencies: [
-                .target(name: "Calendar"),
+                .target(name: "Calendar")
             ],
             path: "Sources/Calendar Foundation Integration"
         ),
         .target(
             name: "Calendar Test Support",
             dependencies: [
-                .target(name: "Calendar"),
+                .target(name: "Calendar")
             ],
             path: "Tests/Support"
         ),
@@ -74,14 +77,15 @@ let package = Package(
 )
 
 for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
-    target.swiftSettings = (target.swiftSettings ?? []) + [
-        .strictMemorySafety(),
-        .enableUpcomingFeature("ExistentialAny"),
-        .enableUpcomingFeature("InternalImportsByDefault"),
-        .enableUpcomingFeature("MemberImportVisibility"),
-        .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
-        .enableUpcomingFeature("InferIsolatedConformances"),
-        .enableExperimentalFeature("Lifetimes"),
-        .treatAllWarnings(as: .error),
-    ]
+    target.swiftSettings =
+        (target.swiftSettings ?? []) + [
+            .strictMemorySafety(),
+            .enableUpcomingFeature("ExistentialAny"),
+            .enableUpcomingFeature("InternalImportsByDefault"),
+            .enableUpcomingFeature("MemberImportVisibility"),
+            .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+            .enableUpcomingFeature("InferIsolatedConformances"),
+            .enableExperimentalFeature("Lifetimes"),
+            .treatAllWarnings(as: .error),
+        ]
 }

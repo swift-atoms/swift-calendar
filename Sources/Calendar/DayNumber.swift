@@ -1,9 +1,9 @@
+internal import Cardinal
 public import Coordinate
 public import Difference
-public import Tagged
-internal import Cardinal
 internal import Magnitude
 internal import Polarity
+public import Tagged
 
 public struct DayNumber {
     private let position: Coordinate<1, Int64>
@@ -17,10 +17,12 @@ extension DayNumber {
 
     private static func displacement(from start: Self, to end: Self) -> Offset {
         let delta = Int128(end.rawValue) - Int128(start.rawValue)
-        return Offset(_unchecked: Difference(
-            polarity: delta < 0 ? .negative : .positive,
-            magnitude: Difference.Magnitude(Cardinal(UInt(delta.magnitude)))
-        ))
+        return Offset(
+            _unchecked: Difference(
+                polarity: delta < 0 ? .negative : .positive,
+                magnitude: Difference.Magnitude(Cardinal(UInt(delta.magnitude)))
+            )
+        )
     }
 
     public func advanced(by offset: Offset) throws(Error) -> Self {
@@ -42,7 +44,9 @@ extension DayNumber {
 
     public func distance(to other: Self) -> Offset { Self.displacement(from: self, to: other) }
     public static func < (lhs: Self, rhs: Self) -> Bool { lhs.rawValue < rhs.rawValue }
-    public static func + (lhs: Self, rhs: Offset) throws(Error) -> Self { try lhs.advanced(by: rhs) }
+    public static func + (lhs: Self, rhs: Offset) throws(Error) -> Self {
+        try lhs.advanced(by: rhs)
+    }
     public static func - (lhs: Self, rhs: Self) -> Offset { rhs.distance(to: lhs) }
 }
 

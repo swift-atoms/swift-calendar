@@ -26,7 +26,10 @@ extension Calendar {
         }
     }
 
-    public func distance(from start: Date, to end: Date) throws(Calendar<Date>.Error) -> DayNumber.Offset {
+    public func distance(
+        from start: Date,
+        to end: Date
+    ) throws(Calendar<Date>.Error) -> DayNumber.Offset {
         let first: DayNumber
         let last: DayNumber
         do throws(Calendar<Date>.Encode.Error) {

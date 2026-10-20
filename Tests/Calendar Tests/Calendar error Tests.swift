@@ -3,7 +3,9 @@ import Testing
 
 @Suite struct `Calendar conversion preserves nested error payloads` {
     @Test(arguments: [Int64.min, -1, 0, 1, Int64.max])
-    func `target decode failures retain the unsupported coordinate at the source boundary`(rawValue: Int64) {
+    func `target decode failures retain the unsupported coordinate at the source boundary`(
+        rawValue: Int64
+    ) {
         let source = Calendar<DayNumber>(dayNumber: { $0 }, date: { $0 })
         let target = Calendar<String>(
             dayNumber: { _ throws(Calendar<String>.Encode.Error) in throw .unsupported },

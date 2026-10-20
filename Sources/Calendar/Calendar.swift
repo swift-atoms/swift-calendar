@@ -1,8 +1,9 @@
 public import Optic
 
 public struct Calendar<Date> {
-    public let correspondence: Optic<Date, Date, DayNumber, DayNumber>
-        .Isomorphism.Partial<Calendar<Date>.Encode.Error, Calendar<Date>.Decode.Error>
+    public let correspondence:
+        Optic<Date, Date, DayNumber, DayNumber>
+            .Isomorphism.Partial<Calendar<Date>.Encode.Error, Calendar<Date>.Decode.Error>
 
     public init(
         encode: Calendar<Date>.Encode,

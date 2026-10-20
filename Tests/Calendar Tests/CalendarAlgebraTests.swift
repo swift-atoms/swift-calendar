@@ -1,11 +1,11 @@
-import Testing
 import Calendar
-import Time
-import Difference
 import Cardinal
+import Difference
 import Magnitude
 import Polarity
 import Tagged
+import Testing
+import Time
 
 private struct WeekDate: Equatable {
     let week: Int64
@@ -33,7 +33,9 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
 
 @Suite struct `Calendars preserve their coordinate algebra` {
     @Test(arguments: [Int64.min, -8, -7, -1, 0, 1, 6, 7, 8, Int64.max])
-    func `Week dates and day numbers round trip across their coordinate domain`(rawValue: Int64) throws {
+    func `Week dates and day numbers round trip across their coordinate domain`(
+        rawValue: Int64
+    ) throws {
         let calendar = weekCalendar()
         let day = DayNumber(rawValue: rawValue)
         let date = try calendar.date(on: day)
@@ -50,11 +52,15 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
         #expect(try calendar.adding(days: 5, to: calendar.adding(days: 3, to: start)) == end)
         #expect(try calendar.distance(from: start, to: end).underlying == 8)
         #expect(try calendar.distance(from: end, to: start).underlying == -8)
-        #expect(try calendar.adding(days: calendar.distance(from: start, to: end), to: start) == end)
+        #expect(
+            try calendar.adding(days: calendar.distance(from: start, to: end), to: start) == end
+        )
         #expect(try calendar.adding(days: -8, to: end) == start)
     }
 
-    @Test func `Calendar conversion preserves the day coordinate across date representations`() throws {
+    @Test func `Calendar conversion preserves the day coordinate across date representations`()
+        throws
+    {
         let source = weekCalendar()
         let target = Calendar<DayNumber>(dayNumber: { $0 }, date: { $0 })
         let date = WeekDate(week: 42, weekday: 3)
@@ -74,7 +80,9 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
                 return "origin"
             }
         )
-        #expect(throws: Calendar<String>.Encode.Error.unsupported) { try calendar.dayNumber(of: "missing") }
+        #expect(throws: Calendar<String>.Encode.Error.unsupported) {
+            try calendar.dayNumber(of: "missing")
+        }
         #expect(throws: Calendar<String>.Error.decode(.unsupported(DayNumber(rawValue: 1)))) {
             try calendar.adding(days: 1, to: "origin")
         }
@@ -125,7 +133,10 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
         #expect(composed == .decode(.unsupported(.init(rawValue: 1))))
     }
 
-    @Test func `Day coordinate addition rejects overflow while full range distance remains representable`() {
+    @Test
+    func
+        `Day coordinate addition rejects overflow while full range distance remains representable`()
+    {
         #expect(throws: DayNumber.Error.overflow) { try DayNumber(rawValue: .max).adding(1) }
         #expect(throws: DayNumber.Error.overflow) { try DayNumber(rawValue: .min).adding(-1) }
         let distance = DayNumber(rawValue: .min).distance(to: DayNumber(rawValue: .max))
@@ -151,8 +162,11 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
     @Test func `date time composes the date representation with temporal atoms`() throws {
         let date = WeekDate(week: 42, weekday: 3)
         let value = DateTime(
-            date: date, hour: try Time.Day.Hour(12),
-            millisecond: try .init(123), microsecond: try .init(456), nanosecond: try .init(789)
+            date: date,
+            hour: try Time.Day.Hour(12),
+            millisecond: try .init(123),
+            microsecond: try .init(456),
+            nanosecond: try .init(789)
         )
         #expect(value.date == date)
         #expect(value.hour.value == 12)
