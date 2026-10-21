@@ -6,7 +6,10 @@ import Testing
     func `target decode failures retain the unsupported coordinate at the source boundary`(
         rawValue: Int64
     ) {
-        let source = Calendar<DayNumber>(dayNumber: { $0 }, date: { $0 })
+        let source = Calendar<DayNumber>(
+            dayNumber: { day throws(Calendar<DayNumber>.Encode.Error) in day },
+            date: { day throws(Calendar<DayNumber>.Decode.Error) in day }
+        )
         let target = Calendar<String>(
             dayNumber: { _ throws(Calendar<String>.Encode.Error) in throw .unsupported },
             date: { day throws(Calendar<String>.Decode.Error) in throw .unsupported(day) }
@@ -23,7 +26,10 @@ import Testing
             dayNumber: { _ throws(Calendar<String>.Encode.Error) in throw .unsupported },
             date: { day throws(Calendar<String>.Decode.Error) in throw .unsupported(day) }
         )
-        let target = Calendar<DayNumber>(dayNumber: { $0 }, date: { $0 })
+        let target = Calendar<DayNumber>(
+            dayNumber: { day throws(Calendar<DayNumber>.Encode.Error) in day },
+            date: { day throws(Calendar<DayNumber>.Decode.Error) in day }
+        )
         #expect(throws: Calendar<String>.Error.encode(.unsupported)) {
             try source.convert("unsupported", to: target)
         }

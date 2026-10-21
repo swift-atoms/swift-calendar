@@ -31,8 +31,16 @@ private struct `Calendar directions compose through fixed coordinates` {
 
     @Test(arguments: [Int64.min, -1, 0, 1, Int64.max])
     func `calendar correspondences compose through shared fixed coordinates`(rawValue: Int64) throws {
-        let source = Calendar<Int64>(dayNumber: { DayNumber(rawValue: $0) }, date: { $0.rawValue })
-        let target = Calendar<DayNumber>(dayNumber: { $0 }, date: { $0 })
+        let source = Calendar<Int64>(
+            dayNumber: { value throws(Calendar<Int64>.Encode.Error) in
+                DayNumber(rawValue: value)
+            },
+            date: { day throws(Calendar<Int64>.Decode.Error) in day.rawValue }
+        )
+        let target = Calendar<DayNumber>(
+            dayNumber: { day throws(Calendar<DayNumber>.Encode.Error) in day },
+            date: { day throws(Calendar<DayNumber>.Decode.Error) in day }
+        )
         let conversion = source.correspondence.appending(target.correspondence.reversed)
         let result = try conversion.forward(rawValue)
         #expect(result.rawValue == rawValue)

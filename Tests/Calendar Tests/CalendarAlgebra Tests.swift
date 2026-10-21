@@ -62,7 +62,10 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
         throws
     {
         let source = weekCalendar()
-        let target = Calendar<DayNumber>(dayNumber: { $0 }, date: { $0 })
+        let target = Calendar<DayNumber>(
+            dayNumber: { day throws(Calendar<DayNumber>.Encode.Error) in day },
+            date: { day throws(Calendar<DayNumber>.Decode.Error) in day }
+        )
         let date = WeekDate(week: 42, weekday: 3)
         let converted = try source.convert(date, to: target)
         #expect(converted.rawValue == 296)
@@ -99,7 +102,10 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
                 return "origin"
             }
         )
-        let identity = Calendar<DayNumber>(dayNumber: { $0 }, date: { $0 })
+        let identity = Calendar<DayNumber>(
+            dayNumber: { day throws(Calendar<DayNumber>.Encode.Error) in day },
+            date: { day throws(Calendar<DayNumber>.Decode.Error) in day }
+        )
         let missing = DayNumber(rawValue: 1)
         #expect(throws: Calendar<String>.Decode.Error.unsupported(missing)) {
             try origin.date(on: missing)
@@ -145,7 +151,10 @@ private func weekCalendar() -> sending Calendar<WeekDate> {
     }
 
     @Test func `full coordinate range has a representable displacement`() throws {
-        let calendar = Calendar<DayNumber>(dayNumber: { $0 }, date: { $0 })
+        let calendar = Calendar<DayNumber>(
+            dayNumber: { day throws(Calendar<DayNumber>.Encode.Error) in day },
+            date: { day throws(Calendar<DayNumber>.Decode.Error) in day }
+        )
         let start = DayNumber(rawValue: .min)
         let end = DayNumber(rawValue: .max)
         let forward = try calendar.distance(from: start, to: end)
